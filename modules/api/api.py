@@ -19,7 +19,8 @@ from secrets import compare_digest
 import modules.shared as shared
 from modules import sd_samplers, deepbooru, sd_hijack, images, scripts, ui, postprocessing, errors, restart, shared_items
 from modules.api import models
-from modules.shared import opts
+from modules.shared import opts, cmd_opts
+from modules import processing
 from modules.processing import StableDiffusionProcessingTxt2Img, StableDiffusionProcessingImg2Img, process_images
 from modules.textual_inversion.textual_inversion import create_embedding, train_embedding
 from modules.textual_inversion.preprocess import preprocess
@@ -362,9 +363,17 @@ class Api:
 
         send_images = args.pop('send_images', True)
         args.pop('save_images', None)
-
+        process = processing.StableDiffusionProcessingTxt2Img
+        if cmd_opts.onnx:
+            from modules.sd_onnx import BaseONNXModel
+            if isinstance(shared.sd_model, BaseONNXModel):
+                from modules.sd_onnx import ONNXStableDiffusionProcessingTxt2Img
+                process = ONNXStableDiffusionProcessingTxt2Img
+                if shared.sd_model.is_optimized:
+                    from modules.sd_olive import OptimizedONNXStableDiffusionProcessingTxt2Img
+                    process = OptimizedONNXStableDiffusionProcessingTxt2Img
         with self.queue_lock:
-            with closing(StableDiffusionProcessingTxt2Img(sd_model=shared.sd_model, **args)) as p:
+            with closing(process(sd_model=shared.sd_model, **args)) as p:
                 p.is_api = True
                 p.scripts = script_runner
                 p.outpath_grids = opts.outdir_txt2img_grids
