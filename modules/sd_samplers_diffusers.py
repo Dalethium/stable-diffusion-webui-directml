@@ -2,12 +2,12 @@ import diffusers
 from modules.sd_samplers_common import SamplerData
 
 samplers = [
-    SamplerData("pndm", diffusers.PNDMScheduler, [], None),
-    SamplerData("lms", diffusers.LMSDiscreteScheduler, [], None),
-    SamplerData("heun", diffusers.HeunDiscreteScheduler, [], None),
-    SamplerData("ddim", diffusers.DDIMScheduler, [], None),
-    SamplerData("ddpm", diffusers.DDPMScheduler, [], None),
-    SamplerData("euler", diffusers.EulerDiscreteScheduler, [], None),
-    SamplerData("euler-ancestral", diffusers.EulerAncestralDiscreteScheduler, [], None),
-    SamplerData("dpm", diffusers.DPMSolverMultistepScheduler, [], None),
+    SamplerData("pndm", diffusers.PNDMScheduler, [], {}),
+    SamplerData("lms", diffusers.LMSDiscreteScheduler, [], {}),
+    SamplerData("heun", diffusers.HeunDiscreteScheduler, [], {}),
+    SamplerData("ddim", diffusers.DDIMScheduler, [], {}),
+    SamplerData("ddpm", diffusers.DDPMScheduler, [], {}),
+    SamplerData("euler", diffusers.EulerDiscreteScheduler, [], {}),
+    SamplerData("euler-ancestral", diffusers.EulerAncestralDiscreteScheduler, [], {}),
+    SamplerData("dpm", diffusers.DPMSolverMultistepScheduler, [], {}),
 ]
